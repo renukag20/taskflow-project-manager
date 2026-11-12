@@ -1,0 +1,43 @@
+{% extends "core/base.html" %}
+{% block title %}Tasks{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>Tasks</h1>
+    <p>{{ tasks|length }} task{{ tasks|length|pluralize }} shown.</p>
+  </div>
+  <button class="btn" type="button" onclick="alert('Front-end demo: hook this up to a form or Django model later.')">+ New task</button>
+</div>
+
+<div class="tabs">
+  <a class="tab {% if not active_status %}active{% endif %}" href="{% url 'tasks' %}">All</a>
+  {% for s in statuses %}
+    <a class="tab {% if active_status == s %}active{% endif %}" href="{% url 'tasks' %}?status={{ s|urlencode }}">{{ s }}</a>
+  {% endfor %}
+</div>
+
+<div class="card">
+  <table>
+    <thead><tr><th>Task</th><th>Project</th><th>Assignee</th><th>Status</th><th>Priority</th><th>Due</th></tr></thead>
+    <tbody>
+    {% for t in tasks %}
+      <tr>
+        <td>{{ t.title }}</td>
+        <td class="meta">{{ t.project_name }}</td>
+        <td>
+          <div class="assignee">
+            <span class="avatar" style="background:{{ t.assignee_obj.color }}">{{ t.assignee_obj.initials }}</span>
+            {{ t.assignee_obj.name }}
+          </div>
+        </td>
+        <td><span class="badge b-{{ t.status|slugify }}">{{ t.status }}</span></td>
+        <td>{% include "core/_task_badges.html" %}</td>
+        <td class="meta">{{ t.due }}</td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="6" class="empty">No tasks match this filter.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

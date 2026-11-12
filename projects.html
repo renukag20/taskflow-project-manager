@@ -1,0 +1,35 @@
+{% extends "core/base.html" %}
+{% block title %}Projects{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>Projects</h1>
+    <p>{{ projects|length }} projects in your workspace.</p>
+  </div>
+  <button class="btn" type="button" onclick="alert('Front-end demo: hook this up to a form or Django model later.')">+ New project</button>
+</div>
+
+<div class="grid-cards">
+  {% for p in projects %}
+  <a class="card project-card" href="{% url 'project_detail' p.id %}">
+    <div class="row">
+      <h3>{{ p.name }}</h3>
+      <span class="badge b-{{ p.status|slugify }}">{{ p.status }}</span>
+    </div>
+    <p>{{ p.description }}</p>
+    <div>
+      <div class="row meta"><span>Progress</span><span>{{ p.progress }}%</span></div>
+      <div class="progress" style="margin-top:6px"><div style="width:{{ p.progress }}%"></div></div>
+    </div>
+    <div class="row">
+      <div class="avatars">
+        {% for m in p.member_objs %}
+          <span class="avatar" style="background:{{ m.color }}" title="{{ m.name }}">{{ m.initials }}</span>
+        {% endfor %}
+      </div>
+      <span class="meta">{{ p.task_done }}/{{ p.task_total }} tasks · Due {{ p.due }}</span>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+{% endblock %}

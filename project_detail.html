@@ -1,0 +1,47 @@
+{% extends "core/base.html" %}
+{% block title %}{{ project.name }}{% endblock %}
+{% block content %}
+<a class="back" href="{% url 'projects' %}">← All projects</a>
+<div class="page-head">
+  <div>
+    <h1>{{ project.name }}</h1>
+    <p>{{ project.description }}</p>
+  </div>
+  <div class="row" style="gap:16px">
+    <div class="avatars">
+      {% for m in project.member_objs %}
+        <span class="avatar" style="background:{{ m.color }}" title="{{ m.name }}">{{ m.initials }}</span>
+      {% endfor %}
+    </div>
+    <span class="badge b-{{ project.status|slugify }}">{{ project.status }}</span>
+  </div>
+</div>
+
+<div class="card" style="margin-bottom:24px">
+  <div class="row meta"><span>Overall progress · Due {{ project.due }}</span><span>{{ project.progress }}%</span></div>
+  <div class="progress" style="margin-top:8px"><div style="width:{{ project.progress }}%"></div></div>
+</div>
+
+<div class="board">
+  {% for col in columns %}
+  <div class="column">
+    <h3>{{ col.name }} <span>{{ col.tasks|length }}</span></h3>
+    {% for t in col.tasks %}
+      <div class="task-card">
+        <div class="title">{{ t.title }}</div>
+        <div class="row">
+          {% include "core/_task_badges.html" %}
+          <span class="meta">{{ t.due }}</span>
+        </div>
+        <div class="assignee">
+          <span class="avatar" style="background:{{ t.assignee_obj.color }}">{{ t.assignee_obj.initials }}</span>
+          <span class="meta">{{ t.assignee_obj.name }}</span>
+        </div>
+      </div>
+    {% empty %}
+      <div class="empty">No tasks</div>
+    {% endfor %}
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

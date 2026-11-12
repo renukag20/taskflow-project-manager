@@ -1,0 +1,48 @@
+{% extends "core/base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>Dashboard</h1>
+    <p>Here's what's happening across your projects.</p>
+  </div>
+  <a class="btn" href="{% url 'projects' %}">View projects</a>
+</div>
+
+<div class="stats">
+  <div class="card stat"><div class="num">{{ stats.projects }}</div><div class="label">Total projects</div></div>
+  <div class="card stat"><div class="num">{{ stats.active }}</div><div class="label">In progress</div></div>
+  <div class="card stat"><div class="num">{{ stats.tasks }}</div><div class="label">Total tasks</div></div>
+  <div class="card stat"><div class="num">{{ stats.done }}</div><div class="label">Tasks done</div></div>
+  <div class="card stat"><div class="num">{{ stats.team }}</div><div class="label">Team members</div></div>
+</div>
+
+<div class="grid-2">
+  <div class="card">
+    <h2>Upcoming tasks</h2>
+    <table>
+      <thead><tr><th>Task</th><th>Project</th><th>Priority</th><th>Due</th></tr></thead>
+      <tbody>
+      {% for t in upcoming %}
+        <tr>
+          <td>{{ t.title }}</td>
+          <td class="meta">{{ t.project_name }}</td>
+          <td>{% include "core/_task_badges.html" %}</td>
+          <td class="meta">{{ t.due }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Active projects</h2>
+    {% for p in projects %}
+      <a href="{% url 'project_detail' p.id %}" style="display:block;margin-bottom:18px">
+        <div class="row"><strong>{{ p.name }}</strong><span class="meta">{{ p.progress }}%</span></div>
+        <div class="progress" style="margin-top:8px"><div style="width:{{ p.progress }}%"></div></div>
+      </a>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

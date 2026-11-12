@@ -1,0 +1,24 @@
+{% extends "core/base.html" %}
+{% block title %}Team{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>Team</h1>
+    <p>{{ members|length }} people working across your projects.</p>
+  </div>
+</div>
+
+<div class="grid-cards">
+  {% for m in members %}
+  <div class="card member">
+    <span class="avatar lg" style="background:{{ m.color }}">{{ m.initials }}</span>
+    <h3>{{ m.name }}</h3>
+    <div class="role">{{ m.role }}</div>
+    <div class="member-stats">
+      <div><b>{{ m.project_count }}</b>Projects</div>
+      <div><b>{{ m.task_count }}</b>Open tasks</div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
